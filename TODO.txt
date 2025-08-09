@@ -1,0 +1,130 @@
+ASGC Website Setup TODO List
+=========================
+
+## Initial Setup Completed
+✅ Create monorepo structure
+✅ Setup npm workspaces in root package.json
+✅ Create folder structure (frontend, backend/lambdas, infra)
+✅ Install root dependencies
+✅ Install frontend dependencies
+✅ Install infrastructure dependencies
+✅ Install Lambda dependencies
+✅ Fix Next.js configuration and get dev server running
+✅ Create basic page structure (home, dashboard, uploads, docs)
+
+## Feature Development Completed
+✅ Create feature backlog - docs/backlog.md
+✅ Extend Prisma schema with governance, funding, content models
+✅ Create governance pages (/governance, /governance/meetings)
+✅ Create elections pages (/elections)
+✅ Create get-involved pages (/get-involved)
+✅ Build MeetingList component with filters
+✅ Create seed file for sample data
+✅ Update routes with MVP feature structure
+
+## Frontend Setup (/frontend/)
+✅ Install Next.js 14 dependencies - frontend/package.json
+✅ Configure Tailwind CSS - frontend/tailwind.config.js
+✅ Add ASGC theme colors - frontend/lib/theme.ts
+✅ Create API client - frontend/lib/api.ts
+✅ Build main layout - frontend/app/layout.tsx
+✅ Create home page - frontend/app/page.tsx
+✅ Create dashboard - frontend/app/dashboard/page.tsx
+✅ Build uploads page - frontend/app/uploads/page.tsx
+✅ Create docs/RAG page - frontend/app/docs/page.tsx
+✅ Build FileUpload component - frontend/components/FileUpload.tsx
+✅ Setup environment variables - frontend/.env.example
+✅ Configure Prisma schema - frontend/prisma/schema.prisma
+□ Setup NextAuth with Cognito - frontend/lib/auth.ts (Needs AWS deployment)
+□ Setup shadcn/ui components - frontend/components/ui/
+□ Build RagSearch component - frontend/components/RagSearch.tsx
+
+## Phase 2: Feature Development (COMPLETED ALL CORE FEATURES!)
+
+### Core Features ✅ ALL COMPLETE
+- [x] Create comprehensive backlog and Prisma schema
+- [x] Governance pages (/governance, /governance/meetings, /governance/agendas, /governance/minutes, /governance/bylaws, /governance/resolutions) 
+- [x] Elections pages (/elections)
+- [x] Get Involved page (/get-involved)
+- [x] Funding page (/funding)
+- [x] Services pages (/services/events, /services/jobs)
+- [x] News and Contact pages (/news, /contact)
+- [x] Compliance pages (/privacy, /accessibility, /terms)
+- [x] Enhanced Homepage with comprehensive navigation
+- [x] Updated main navigation header with dropdown menus
+- [ ] Admin dashboard pages
+
+### Components & Features
+- [x] Meeting List component with filtering
+- [x] File Row component for document downloads
+- [x] Sample seed data for development
+- [x] Comprehensive navigation system
+- [x] Responsive design across all pages
+- [ ] Request forms for funding applications  
+- [ ] Event calendar integration
+- [ ] Job posting system
+- [ ] News content management
+- [ ] Committee directory
+- [ ] Student organization directory
+
+### Backend Integration
+- [ ] User authentication with Cognito
+- [ ] Database connection and migrations
+- [ ] File upload to S3 
+- [ ] Search functionality with vectors
+- [ ] Real-time features (notifications, comments)
+- [ ] Admin role-based access control
+
+## Infrastructure Setup (/infra/)
+✅ Setup CDK project - infra/package.json, infra/cdk.json
+✅ Create CDK stack - infra/lib/infra-stack.ts
+✅ Setup CDK bin file - infra/bin/infra.ts
+□ **DEPLOY TO AWS** - Run `npx cdk bootstrap` and `npx cdk deploy`
+□ Configure S3 bucket for uploads
+□ Setup CloudFront distribution
+□ Create Cognito User Pool
+□ Setup Aurora Serverless v2 with pgvector
+□ Create API Gateway
+□ Setup IAM roles and permissions
+
+## Lambda Functions (/lambdas/)
+✅ Presign upload Lambda - lambdas/presign-upload/index.ts
+✅ RAG ingest Lambda - lambdas/rag-ingest/app.py
+✅ RAG query Lambda - lambdas/rag-query/app.py
+✅ Lambda package.json files
+✅ Lambda requirements.txt files
+□ Test Lambda functions after AWS deployment
+
+## CI/CD Setup
+✅ GitHub Actions workflow - .github/workflows/ci.yml
+□ Configure AWS credentials in GitHub Secrets
+□ Setup deployment pipeline
+
+## Database Setup
+□ **RUN MIGRATION** - Run `npx prisma migrate dev --name add-governance-models`
+□ **DEPLOY INFRASTRUCTURE FIRST**
+□ Create vector extension migration
+□ Test Prisma migrations
+□ Run seed script to populate sample data
+
+## Testing & Deployment
+✅ Test local development environment ✅ WORKING at http://localhost:3000
+□ Deploy CDK stack to AWS
+□ Test file upload functionality
+□ Test RAG ingestion and query
+□ Deploy frontend to Vercel
+
+## Post-Setup Configuration
+□ Configure real AWS credentials
+□ Update environment variables with actual values from CDK outputs
+□ Test end-to-end functionality
+□ Setup monitoring and logging
+
+## NEXT IMMEDIATE STEPS:
+1. � **Create Prisma Migration**: Run `cd frontend && npx prisma migrate dev --name add-governance-models`
+2. 🌐 **Complete Remaining Pages**: Build out funding, services, news, contact pages
+3. 🔐 **Add RBAC**: Implement role-based access control middleware
+4. 🚀 **AWS Setup**: Run `cd infra && npx cdk bootstrap` then `npx cdk deploy`
+5. 🔧 **Environment Variables**: Update frontend/.env.local with CDK outputs
+6. 🗄️ **Database**: Run Prisma migrations and seed script after Aurora is deployed
+7. 🧪 **Testing**: Test file upload and RAG functionality

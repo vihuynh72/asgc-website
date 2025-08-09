@@ -1,0 +1,306 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  OFFICER
+  ADVISOR
+  ADMIN
+}
+
+enum DocumentType {
+  BYLAWS
+  MINUTES
+  POLICY
+  OTHER
+}
+
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  files        File[]
+  applications Application[]
+
+  @@map("users")
+}
+
+model File {
+  id         String   @id @default(cuid())
+  s3Key      String   @unique
+  uploaderId String
+  mime       String
+  size       Int
+  createdAt  DateTime @default(now())
+
+  uploader  User       @relation(fields: [uploaderId], references: [id])
+  documents Document[]
+
+  @@map("files")
+}
+
+model Document {
+  id        String       @id @default(cuid())
+  title     String
+  type      DocumentType @default(OTHER)
+  fileId    String       @unique
+  createdAt DateTime     @default(now())
+
+  file       File        @relation(fields: [fileId], references: [id])
+  embeddings Embedding[]
+
+  @@map("documents")
+}
+
+model Embedding {
+  id         String               @id @default(cuid())
+  documentId String
+  chunkIndex Int
+  content    String
+  embedding  Unsupported("vector(1536)")
+
+  document Document @relation(fields: [documentId], references: [id])
+
+  @@index([documentId, chunkIndex])
+  @@map("embeddings")
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime?
+  location    String?
+  createdAt   DateTime  @default(now())
+
+  @@map("events")
+}
+
+model Application {
+  id        String            @id @default(cuid())
+  userId    String
+  status    ApplicationStatus @default(DRAFT)
+  responses Json?
+  createdAt DateTime          @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("applications")
+}
+
+// Governance Models
+model Council {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  
+  meetings    Meeting[]
+
+  @@map("councils")
+}
+
+model Meeting {
+  id          String   @id @default(cuid())
+  councilId   String
+  date        DateTime
+  location    String?
+  livestream  String?  // Zoom/YouTube URL
+  publicNote  String?  // public comment instructions
+  createdAt   DateTime @default(now())
+  
+  council     Council  @relation(fields: [councilId], references: [id])
+  agendas     Agenda[]
+  minutes     Minutes[]
+  packets     Packet[]
+  votes       Vote[]
+
+  @@map("meetings")
+}
+
+model Agenda {
+  id        String   @id @default(cuid())
+  meetingId String
+  title     String
+  s3Key     String   // file in S3
+  createdAt DateTime @default(now())
+  
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+
+  @@map("agendas")
+}
+
+model Minutes {
+  id        String   @id @default(cuid())
+  meetingId String
+  title     String
+  s3Key     String
+  summary   String?  // Phase-2 AI summary
+  createdAt DateTime @default(now())
+  
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+
+  @@map("minutes")
+}
+
+model Packet {
+  id        String   @id @default(cuid())
+  meetingId String
+  title     String
+  s3Key     String
+  createdAt DateTime @default(now())
+  
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+
+  @@map("packets")
+}
+
+model Resolution {
+  id         String   @id @default(cuid())
+  code       String   @unique // e.g., ASGC-2025-01
+  title      String
+  text       String
+  adoptedOn  DateTime?
+  createdAt  DateTime @default(now())
+  
+  votes      Vote[]
+
+  @@map("resolutions")
+}
+
+model Vote {
+  id           String   @id @default(cuid())
+  meetingId    String
+  resolutionId String?
+  memberName   String
+  memberRole   String?
+  vote         VoteChoice
+  createdAt    DateTime @default(now())
+  
+  meeting      Meeting     @relation(fields: [meetingId], references: [id])
+  resolution   Resolution? @relation(fields: [resolutionId], references: [id])
+
+  @@map("votes")
+}
+
+enum VoteChoice { 
+  YES 
+  NO 
+  ABSTAIN 
+  ABSENT 
+}
+
+model Committee {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  cadence     String?  // e.g., "Biweekly"
+  seats       Int?
+  applyUrl    String?
+  createdAt   DateTime @default(now())
+
+  @@map("committees")
+}
+
+// Funding Models
+model FundingPolicy {
+  id         String   @id @default(cuid())
+  title      String
+  body       String   // markdown
+  effectiveOn DateTime?
+  createdAt  DateTime @default(now())
+
+  @@map("funding_policies")
+}
+
+model FundingProgram {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  description String?
+  capAmount  Int?     // cents
+  createdAt  DateTime @default(now())
+  
+  requests   FundingRequest[]
+
+  @@map("funding_programs")
+}
+
+model FundingRequest {
+  id            String   @id @default(cuid())
+  programId     String
+  orgName       String
+  contactEmail  String
+  status        RequestStatus @default(DRAFT)
+  amountCents   Int?
+  submittedAt   DateTime?
+  attachments   Json?    // list of S3 objects
+  createdAt     DateTime @default(now())
+  
+  program       FundingProgram @relation(fields: [programId], references: [id])
+
+  @@map("funding_requests")
+}
+
+enum RequestStatus { 
+  DRAFT 
+  SUBMITTED 
+  UNDER_REVIEW 
+  APPROVED 
+  REJECTED 
+}
+
+// Content Models
+model Job {
+  id          String   @id @default(cuid())
+  title       String
+  department  String?
+  description String?
+  applyUrl    String
+  postedAt    DateTime @default(now())
+
+  @@map("jobs")
+}
+
+model NewsPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  body        String   // markdown
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@map("news_posts")
+}
+
+model ContactRequest {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  subject    String?
+  message    String
+  createdAt  DateTime @default(now())
+
+  @@map("contact_requests")
+}
