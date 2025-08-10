@@ -1,4 +1,5 @@
-import MeetingList from '../../components/Governance/MeetingList'
+import { MeetingList } from '../../../components/governance/MeetingList';
+import { upcomingMeetings } from '../../../lib/content/data';
 
 export default function MeetingsPage() {
   return (
@@ -21,7 +22,7 @@ export default function MeetingsPage() {
         </ul>
       </div>
 
-      <MeetingList />
+      <MeetingList meetings={upcomingMeetings} />
     </div>
   )
 }

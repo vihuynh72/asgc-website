@@ -1,117 +1,210 @@
+import { Breadcrumbs } from "../../components/nav/Breadcrumbs";
+import { Timeline } from "../../components/elections/Timeline";
+
 export default function ElectionsPage() {
+  // Mock election timeline data
+  const electionTimeline = [
+    {
+      title: "Candidate Information Session",
+      description: "Learn about the roles, responsibilities, and campaign requirements. All interested students welcome to attend.",
+      date: "January 15, 2024",
+      status: 'completed' as const
+    },
+    {
+      title: "Nomination Period Opens",
+      description: "Students can submit their nomination forms and begin collecting required signatures from fellow students.",
+      date: "January 22, 2024", 
+      status: 'completed' as const
+    },
+    {
+      title: "Campaign Period",
+      description: "Approved candidates may begin campaigning. All campaign materials must follow ASGC guidelines.",
+      date: "February 5-19, 2024",
+      status: 'current' as const
+    },
+    {
+      title: "Voting Period", 
+      description: "Students vote online through the secure ASGC election portal. Voting closes at 11:59 PM.",
+      date: "February 20-22, 2024",
+      status: 'upcoming' as const
+    },
+    {
+      title: "Results Announcement",
+      description: "Election results will be announced and new officers will be introduced to the campus community.",
+      date: "February 26, 2024",
+      status: 'upcoming' as const
+    },
+    {
+      title: "Officer Transition",
+      description: "Newly elected officers begin their terms and participate in comprehensive orientation training.",
+      date: "March 1, 2024",
+      status: 'upcoming' as const
+    }
+  ];
+
+  const currentCandidates = [
+    {
+      name: "Maria Rodriguez",
+      position: "President",
+      year: "Junior",
+      major: "Political Science",
+      platform: "Expanding mental health resources and improving campus sustainability initiatives"
+    },
+    {
+      name: "James Chen", 
+      position: "President",
+      year: "Senior",
+      major: "Business Administration",
+      platform: "Enhancing student services and creating more internship opportunities"
+    },
+    {
+      name: "Sarah Williams",
+      position: "Vice President",
+      year: "Sophomore", 
+      major: "Communications",
+      platform: "Strengthening campus community through events and improved student engagement"
+    },
+    {
+      name: "Alex Thompson",
+      position: "Treasurer",
+      year: "Junior",
+      major: "Accounting",
+      platform: "Transparent budget management and expanding funding for student organizations"
+    }
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">ASGC Elections</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-lg shadow-md border">
-            <h2 className="text-xl font-semibold mb-4">Election Information</h2>
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-medium text-gray-900">Next Election</h3>
-                <p className="text-gray-600">Spring 2026 ASGC Elections</p>
-                <p className="text-sm text-gray-500">Candidate filing opens: March 1, 2026</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium text-gray-900">Key Dates</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Candidate filing: March 1-15, 2026</li>
-                  <li>• Campaign period: March 16 - April 4, 2026</li>
-                  <li>• Voting: April 5-7, 2026</li>
-                  <li>• Results announced: April 8, 2026</li>
-                </ul>
-              </div>
-            </div>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <Breadcrumbs />
+        
+        <div className="max-w-4xl mx-auto">
+          {/* Page Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
+              ASGC Elections
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Your voice matters. Participate in student government by voting for candidates who will represent your interests and improve campus life.
+            </p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md border">
-            <h2 className="text-xl font-semibold mb-4">Eligibility Requirements</h2>
-            <div className="space-y-3 text-sm">
-              <div>
-                <h4 className="font-medium">To Run for Office:</h4>
-                <ul className="text-gray-600 space-y-1 ml-4">
-                  <li>• Currently enrolled student (minimum 6 units)</li>
-                  <li>• Cumulative GPA of 2.5 or higher</li>
-                  <li>• Good academic and disciplinary standing</li>
-                  <li>• Completed at least one semester at Grossmont College</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-medium">To Vote:</h4>
-                <ul className="text-gray-600 space-y-1 ml-4">
-                  <li>• Currently enrolled student</li>
-                  <li>• Valid student ID required</li>
-                </ul>
+          {/* Election Timeline */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold text-foreground mb-8">
+              2024 Spring Election Timeline
+            </h2>
+            <div className="bg-card rounded-lg p-8 border">
+              <Timeline items={electionTimeline} />
+            </div>
+          </section>
+
+          {/* Current Candidates */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold text-foreground mb-8">
+              Current Candidates
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {currentCandidates.map((candidate, index) => (
+                <div key={index} className="bg-card rounded-lg p-6 border">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-xl font-semibold text-foreground">
+                      {candidate.name}
+                    </h3>
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                      {candidate.position}
+                    </span>
+                  </div>
+                  <div className="text-sm text-muted-foreground mb-3">
+                    {candidate.year} • {candidate.major}
+                  </div>
+                  <p className="text-foreground leading-relaxed">
+                    {candidate.platform}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Voting Information */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold text-foreground mb-8">
+              How to Vote
+            </h2>
+            <div className="bg-card rounded-lg p-8 border">
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    1. Verify Eligibility
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Must be enrolled in at least 6 units and in good academic standing
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    2. Access Portal
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Log in with your student ID through the secure election portal
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a4 4 0 118 0v4m-4 0v10l-2-2m2 2l2-2" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    3. Cast Your Vote
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Review candidates and submit your ballot before the deadline
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
 
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-lg shadow-md border">
-            <h2 className="text-xl font-semibold mb-4">Candidate Resources</h2>
-            <div className="space-y-3">
-              <a href="#" className="block p-3 border border-gray-200 rounded hover:bg-gray-50">
-                <div className="font-medium text-blue-600">Campaign Guidelines</div>
-                <div className="text-sm text-gray-600">Rules and regulations for campaigning</div>
-              </a>
-              
-              <a href="#" className="block p-3 border border-gray-200 rounded hover:bg-gray-50">
-                <div className="font-medium text-blue-600">Candidate Handbook</div>
-                <div className="text-sm text-gray-600">Complete guide to running for ASGC office</div>
-              </a>
-              
-              <a href="#" className="block p-3 border border-gray-200 rounded hover:bg-gray-50">
-                <div className="font-medium text-blue-600">Filing Forms</div>
-                <div className="text-sm text-gray-600">Candidate declaration and petition forms</div>
-              </a>
-              
-              <a href="#" className="block p-3 border border-gray-200 rounded hover:bg-gray-50">
-                <div className="font-medium text-blue-600">Position Descriptions</div>
-                <div className="text-sm text-gray-600">Duties and responsibilities of each office</div>
-              </a>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-md border">
-            <h2 className="text-xl font-semibold mb-4">Get Started</h2>
-            <div className="space-y-4">
-              <p className="text-gray-600 text-sm">
-                Interested in running for ASGC office? Start by attending an information session 
-                and reviewing the candidate requirements.
+          {/* Contact Information */}
+          <section>
+            <div className="bg-accent/50 rounded-lg p-8 text-center">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                Questions About Elections?
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Contact the ASGC Elections Committee for assistance with the voting process, candidate information, or election rules.
               </p>
-              
-              <div className="space-y-2">
-                <button className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                  Attend Info Session
-                </button>
-                <button className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
-                  Download Candidate Packet
-                </button>
-                <a href="/elections/results" className="block w-full bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 text-center">
-                  View Past Results
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a 
+                  href="mailto:elections@asgc.edu"
+                  className="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                >
+                  Email Elections Committee
+                </a>
+                <a 
+                  href="/contact"
+                  className="bg-background text-foreground px-6 py-3 rounded-lg font-medium border hover:bg-accent transition-colors"
+                >
+                  Visit ASGC Office
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-blue-800 mb-2">Questions?</h3>
-        <p className="text-blue-700 mb-4">
-          Contact the ASGC Election Committee for questions about the election process, 
-          candidate requirements, or voting procedures.
-        </p>
-        <div className="space-y-1 text-sm text-blue-700">
-          <p>Email: elections@asgc.edu</p>
-          <p>Phone: (619) 644-7320</p>
-          <p>Office: Student Center, Room 110</p>
+          </section>
         </div>
       </div>
     </div>
-  )
+  );
 }
