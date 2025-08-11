@@ -1,78 +1,114 @@
-import Link from 'next/link';
-import { NewsArticle } from '../../lib/content/types';
+"use client";
+// OVERHAUL PLAN: News card with image, featured badge, and clean meta; subtle hover lift and skeleton on load.
+
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { scaleOnHover, respectReducedMotion, skeletonPulse } from "../motion/presets";
+import { formatDateUTC } from "../../lib/date";
 
 interface NewsCardProps {
-  article: NewsArticle;
+  title: string;
+  excerpt: string;
+  publishedAt: string;
+  author: string;
+  href: string;
+  imageUrl?: string;
   featured?: boolean;
+  loading?: boolean;
+  className?: string;
 }
 
-export function NewsCard({ article, featured = false }: NewsCardProps) {
-  const cardSize = featured ? 'col-span-2' : 'col-span-1';
-  
+export function NewsCard({
+  title,
+  excerpt,
+  publishedAt,
+  author,
+  href,
+  imageUrl,
+  featured = false,
+  loading = false,
+  className = "",
+}: NewsCardProps) {
+  if (loading) {
+    return (
+      <motion.div
+        {...respectReducedMotion(skeletonPulse)}
+        className={`
+          rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]
+          shadow-sm overflow-hidden ${className}
+        `}
+      >
+        <div className="aspect-video bg-[var(--asgc-neutral-50)]"></div>
+        <div className="p-6 space-y-4">
+          <div className="space-y-3">
+            <div className="h-6 bg-[var(--asgc-neutral-50)] rounded w-3/4"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-[var(--asgc-neutral-50)] rounded"></div>
+              <div className="h-4 bg-[var(--asgc-neutral-50)] rounded w-5/6"></div>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="h-4 bg-[var(--asgc-neutral-50)] rounded w-20"></div>
+            <div className="h-4 bg-[var(--asgc-neutral-50)] rounded w-16"></div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  const formatDate = (dateString: string) => formatDateUTC(dateString);
+
   return (
-    <article className={`asgc-card overflow-hidden hover:shadow-lg transition-shadow duration-200 ${cardSize}`}>
-      {article.imageUrl && (
-        <div className="aspect-w-16 aspect-h-9 bg-gray-200">
-          <img
-            src={article.imageUrl}
-            alt=""
-            className="w-full h-48 object-cover"
-            loading="lazy"
-          />
-        </div>
-      )}
-      
-      <div className="p-6">
-        {featured && (
-          <div className="mb-3">
-            <span 
-              className="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full"
-              style={{ backgroundColor: 'var(--asgc-secondary)' }}
-            >
+    <motion.div {...respectReducedMotion(scaleOnHover)}>
+      <Link
+        href={href}
+        className={`
+          group block rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]
+          shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden
+          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
+          ${featured ? "ring-2 ring-[var(--asgc-primary)]/20" : ""}
+          ${className}
+        `}
+      >
+        {/* Image */}
+        {imageUrl && (
+          <div className="relative aspect-video overflow-hidden">
+            <Image
+              src={imageUrl}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        )}
+
+        <div className="p-6">
+          {/* Featured badge */}
+          {featured && (
+            <div className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--asgc-primary)]/10 text-[var(--asgc-primary)] mb-3">
               Featured
-            </span>
-          </div>
-        )}
-        
-        <div className="mb-3">
-          <h3 className={featured ? 'asgc-h4' : 'asgc-h5'}>
-            <Link 
-              href={`/news/${article.slug}`}
-              className="text-gray-900 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
-            >
-              {article.title}
-            </Link>
+            </div>
+          )}
+
+          {/* Title */}
+          <h3 className="font-semibold text-[var(--color-foreground)] mb-3 group-hover:text-[var(--asgc-primary)] transition-colors line-clamp-2">
+            {title}
           </h3>
-        </div>
-        
-        <p className="text-gray-600 text-sm leading-relaxed mb-4">
-          {article.excerpt}
-        </p>
-        
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <span>{article.author}</span>
-          <time dateTime={article.publishedAt}>
-            {new Date(article.publishedAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            })}
-          </time>
-        </div>
-        
-        {article.tags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {article.tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md"
-              >
-                {tag}
-              </span>
-            ))}
+
+          {/* Excerpt */}
+          <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-4 line-clamp-3">
+            {excerpt}
+          </p>
+
+          {/* Meta */}
+          <div className="flex items-center justify-between text-xs text-[var(--color-muted)]">
+            <span>{author}</span>
+            <span>{formatDate(publishedAt)}</span>
           </div>
-        )}
-      </div>
-    </article>
+        </div>
+      </Link>
+    </motion.div>
   );
 }

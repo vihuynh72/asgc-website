@@ -1,3 +1,6 @@
+import { formatDateUTC } from '../../../lib/date'
+import { UtilityBar } from '../../../components/governance/UtilityBar'
+
 export default function ResolutionsPage() {
   // TODO: Replace with actual API call to fetch resolutions
   const mockResolutions = [
@@ -98,26 +101,27 @@ export default function ResolutionsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container section-spacing">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Resolutions</h1>
-          <p className="text-lg text-gray-600">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-[var(--color-foreground)]">Resolutions</h1>
+          <p className="text-lg text-[var(--color-muted)]">
             Track ASGC resolutions and their impact on campus policy and student life.
           </p>
         </div>
+        <UtilityBar downloadHref="/governance/resolutions" />
 
         {/* Filter and Search */}
-        <div className="bg-white rounded-lg shadow-md border p-6 mb-8">
+  <div className="asgc-card p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <input
                 type="text"
                 placeholder="Search resolutions..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    className="form-input"
               />
             </div>
-            <select className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <select className="form-input py-2">
               <option value="">All Categories</option>
               <option value="health">Health & Wellness</option>
               <option value="safety">Safety & Security</option>
@@ -125,7 +129,7 @@ export default function ResolutionsPage() {
               <option value="finance">Finance</option>
               <option value="academic">Academic Affairs</option>
             </select>
-            <select className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <select className="form-input py-2">
               <option value="">All Status</option>
               <option value="passed">Passed</option>
               <option value="under-review">Under Review</option>
@@ -135,19 +139,19 @@ export default function ResolutionsPage() {
         </div>
 
         {/* Submit Resolution CTA */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+        <div className="asgc-card p-6 mb-8">
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-blue-900 mb-2">Have an Idea for a Resolution?</h2>
-            <p className="text-blue-700 mb-4">
+            <h2 className="text-xl font-semibold text-[var(--color-foreground)] mb-2">Have an Idea for a Resolution?</h2>
+            <p className="text-[var(--color-muted)] mb-4">
               Students can propose resolutions to address campus issues and improvements.
             </p>
             <button 
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="btn-primary disabled:opacity-60"
               disabled
             >
               Submit Resolution
             </button>
-            <p className="text-xs text-blue-600 mt-2">
+            <p className="text-xs text-[var(--color-muted)] mt-2">
               Resolution submission will be available after authentication setup.
             </p>
           </div>
@@ -156,14 +160,14 @@ export default function ResolutionsPage() {
         {/* Under Review Resolutions */}
         {underReviewResolutions.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Under Review</h2>
+            <h2 className="text-2xl font-bold mb-6 text-[var(--color-foreground)]">Under Review</h2>
             <div className="space-y-4">
               {underReviewResolutions.map((resolution) => (
-                <div key={resolution.id} className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                <div key={resolution.id} className="asgc-card">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-[var(--color-foreground)]">
                           {resolution.number}: {resolution.title}
                         </h3>
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(resolution.status)}`}>
@@ -174,29 +178,24 @@ export default function ResolutionsPage() {
                         </span>
                       </div>
                       
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
-                        <span>Introduced: {resolution.introducedDate.toLocaleDateString()}</span>
+                      <div className="flex items-center space-x-4 text-sm text-[var(--color-muted)] mb-3">
+                        <span>Introduced: {formatDateUTC(resolution.introducedDate)}</span>
                         <span>•</span>
                         <span>Sponsor: {resolution.sponsor}</span>
                       </div>
                     </div>
                     
                     <div className="flex space-x-2">
-                      <button 
-                        className="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                        disabled
-                      >
-                        View Draft
-                      </button>
+                      <button className="btn-secondary" disabled>View Draft</button>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-4">
+                  <p className="text-[var(--color-foreground)] mb-4">
                     {resolution.summary}
                   </p>
 
-                  <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-3">
-                    <p className="text-yellow-800 text-sm">
+                  <div className="asgc-card bg-transparent">
+                    <p className="text-[var(--color-muted)] text-sm">
                       This resolution is currently under review by the appropriate committee. 
                       Public input period ends on September 15, 2025.
                     </p>
@@ -209,15 +208,15 @@ export default function ResolutionsPage() {
 
         {/* Passed Resolutions */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Passed Resolutions</h2>
+          <h2 className="text-2xl font-bold mb-6 text-[var(--color-foreground)]">Passed Resolutions</h2>
           <div className="space-y-6">
             {passedResolutions.map((resolution) => (
-              <div key={resolution.id} className="bg-white rounded-lg shadow-md border overflow-hidden">
+              <div key={resolution.id} className="asgc-card overflow-hidden">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-semibold text-gray-900">
+                        <h3 className="text-xl font-semibold text-[var(--color-foreground)]">
                           {resolution.number}: {resolution.title}
                         </h3>
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(resolution.status)}`}>
@@ -228,8 +227,8 @@ export default function ResolutionsPage() {
                         </span>
                       </div>
                       
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
-                        <span>Passed: {resolution.passedDate?.toLocaleDateString()}</span>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted)] mb-3">
+                        <span>Passed: {resolution.passedDate ? formatDateUTC(resolution.passedDate) : ''}</span>
                         <span>•</span>
                         <span>Sponsor: {resolution.sponsor}</span>
                         {resolution.votes && (
@@ -244,37 +243,30 @@ export default function ResolutionsPage() {
                     </div>
                     
                     <div className="flex space-x-2">
-                      <button 
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                        disabled
-                      >
-                        Download PDF
-                      </button>
-                      <button className="text-blue-600 hover:text-blue-800 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-50">
-                        View Details
-                      </button>
+                      <button className="btn-primary disabled:opacity-60" disabled>Download PDF</button>
+                      <button className="btn-secondary">View Details</button>
                     </div>
                   </div>
 
                   <div className="mb-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Summary</h4>
-                    <p className="text-gray-600">{resolution.summary}</p>
+                    <h4 className="font-medium text-[var(--color-foreground)] mb-2">Summary</h4>
+                    <p className="text-[var(--color-muted)]">{resolution.summary}</p>
                   </div>
 
                   {resolution.impact && (
-                    <div className="bg-green-50 rounded-lg p-4 mb-4">
-                      <h4 className="font-medium text-green-900 mb-2">Impact & Implementation</h4>
-                      <p className="text-green-800">{resolution.impact}</p>
+                    <div className="asgc-card bg-transparent p-4 mb-4">
+                      <h4 className="font-medium text-[var(--color-foreground)] mb-2">Impact & Implementation</h4>
+                      <p className="text-[var(--color-muted)]">{resolution.impact}</p>
                     </div>
                   )}
 
                   {resolution.votes && (
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <h4 className="font-medium text-gray-900 mb-3">Voting Results</h4>
+                    <div className="asgc-card bg-transparent p-4">
+                      <h4 className="font-medium text-[var(--color-foreground)] mb-3">Voting Results</h4>
                       <div className="grid grid-cols-3 gap-4">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-green-600">{resolution.votes.yes}</div>
-                          <div className="text-sm text-gray-600">Yes</div>
+                          <div className="text-2xl font-bold text-[var(--color-foreground)]">{resolution.votes.yes}</div>
+                          <div className="text-sm text-[var(--color-muted)]">Yes</div>
                         </div>
                         <div className="text-center">
                           <div className="text-2xl font-bold text-red-600">{resolution.votes.no}</div>
@@ -318,7 +310,7 @@ export default function ResolutionsPage() {
                       </div>
                       
                       <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
-                        <span>Introduced: {resolution.introducedDate.toLocaleDateString()}</span>
+                        <span>Introduced: {formatDateUTC(resolution.introducedDate)}</span>
                         <span>•</span>
                         <span>Sponsor: {resolution.sponsor}</span>
                         {resolution.votes && (

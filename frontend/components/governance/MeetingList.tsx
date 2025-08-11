@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Meeting } from '../../lib/content/types';
+import { formatDateUTC } from '../../lib/date';
 
 interface MeetingListProps {
   meetings: Meeting[];
@@ -21,13 +22,13 @@ export function MeetingList({ meetings, showFilters = true }: MeetingListProps) 
       
       {meetings.length === 0 && (
         <div className="text-center py-12">
-          <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
+          <div className="mx-auto h-12 w-12 text-[var(--asgc-muted)] mb-4">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No meetings found</h3>
-          <p className="text-gray-500">Try adjusting your filters or check back later.</p>
+          <h3 className="text-lg font-medium text-[var(--asgc-neutral-900)] mb-2">No meetings found</h3>
+          <p className="text-[var(--asgc-muted)]">Try adjusting your filters or check back later.</p>
         </div>
       )}
     </div>
@@ -70,7 +71,7 @@ function MeetingRow({ meeting }: MeetingRowProps) {
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-[var(--asgc-neutral-900)]">
               {meeting.title}
             </h3>
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(meeting.status)}`}>
@@ -81,19 +82,19 @@ function MeetingRow({ meeting }: MeetingRowProps) {
             </span>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-[var(--asgc-muted)]">
             <div className="flex items-center">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <time dateTime={`${meeting.date}T${meeting.time}`}>
-                {new Date(meeting.date).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
+                <time dateTime={`${meeting.date}T${meeting.time}`}>
+                  {formatDateUTC(meeting.date, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
             </div>
             
             <div className="flex items-center">
@@ -117,7 +118,7 @@ function MeetingRow({ meeting }: MeetingRowProps) {
           {meeting.agendaUrl && (
             <Link
               href={meeting.agendaUrl}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-[var(--asgc-accent)] hover:text-[color:var(--asgc-accent)]/80 hover:bg-[var(--asgc-neutral-50)] rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2"
             >
               <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -129,7 +130,7 @@ function MeetingRow({ meeting }: MeetingRowProps) {
           {meeting.minutesUrl && (
             <Link
               href={meeting.minutesUrl}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-[var(--asgc-primary)] hover:bg-[var(--asgc-neutral-50)] rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2"
             >
               <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -141,7 +142,7 @@ function MeetingRow({ meeting }: MeetingRowProps) {
           {meeting.videoUrl && (
             <Link
               href={meeting.videoUrl}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-[var(--asgc-secondary)] hover:bg-[var(--asgc-neutral-50)] rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--asgc-secondary)] focus:ring-offset-2"
             >
               <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10v4a2 2 0 002 2h2a2 2 0 002-2v-4M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1" />
@@ -167,26 +168,26 @@ function FilterBar() {
             type="search"
             id="search"
             placeholder="Search meetings..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="form-input py-2"
           />
         </div>
         
         <div className="flex gap-3">
-          <select className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <select className="form-input py-2 text-sm">
             <option value="">All Types</option>
             <option value="council">Council</option>
             <option value="committee">Committee</option>
             <option value="board">Board</option>
           </select>
           
-          <select className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <select className="form-input py-2 text-sm">
             <option value="">All Status</option>
             <option value="upcoming">Upcoming</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
           
-          <select className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <select className="form-input py-2 text-sm">
             <option value="">All Semesters</option>
             <option value="fall-2025">Fall 2025</option>
             <option value="spring-2025">Spring 2025</option>

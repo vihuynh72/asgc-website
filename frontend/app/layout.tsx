@@ -1,8 +1,10 @@
+// OVERHAUL PLAN: App wrapper with ThemeProvider, sticky Header/Footer, and visible skip-link; imports tokenized globals.
 import '../styles/globals.css';
 import { Inter } from 'next/font/google';
-// import { ThemeProvider } from '../components/theme/ThemeProvider';
-// import { Header } from '../components/layout/ModernHeader';
-// import { Footer } from '../components/layout/Footer';
+import { ThemeProvider } from '../components/theme/ThemeProvider';
+import { Header } from '../components/layout/Header';
+import { Footer } from '../components/layout/Footer';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -61,17 +63,23 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-[var(--color-background)] antialiased" suppressHydrationWarning>
-        {/* <ThemeProvider> */}
-          <div className="relative flex min-h-screen flex-col">
-            {/* <Header /> */}
-            
-            <main id="main-content" className="flex-1" role="main">
-              {children}
-            </main>
-            
-            {/* <Footer /> */}
-          </div>
-        {/* </ThemeProvider> */}
+        <a href="#main-content" className="skip-to-content">
+          Skip to main content
+        </a>
+        
+        <ErrorBoundary>
+          <ThemeProvider>
+            <div className="relative flex min-h-screen flex-col">
+              <Header />
+              
+              <main id="main-content" className="flex-1" role="main">
+                {children}
+              </main>
+              
+              <Footer />
+            </div>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

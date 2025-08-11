@@ -1,4 +1,4 @@
-interface ApiResponse<T = any> {
+interface ApiResponse<T = unknown> {
   data?: T
   error?: string
   message?: string

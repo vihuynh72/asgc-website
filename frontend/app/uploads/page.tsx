@@ -1,4 +1,6 @@
-import FileUpload from '../../components/FileUpload'
+import dynamic from 'next/dynamic'
+
+const UploadClient = dynamic(() => import('./UploadClient'), { ssr: false })
 
 export default function UploadsPage() {
   return (
@@ -18,12 +20,7 @@ export default function UploadsPage() {
           </p>
         </div>
         
-        <FileUpload 
-          onUploadComplete={(key) => {
-            console.log('File uploaded:', key)
-            alert(`File uploaded successfully: ${key}`)
-          }}
-        />
+  <UploadClient />
       </div>
     </div>
   )

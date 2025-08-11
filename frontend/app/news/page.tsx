@@ -1,3 +1,5 @@
+import { formatDateUTC } from '../../lib/date'
+
 export default function NewsPage() {
   // TODO: Replace with actual API call to fetch news posts
   const mockNews = [
@@ -71,11 +73,7 @@ export default function NewsPage() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2 text-sm text-gray-500">
                     <time dateTime={article.publishedAt.toISOString()}>
-                      {article.publishedAt.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {formatDateUTC(article.publishedAt, { year: 'numeric', month: 'long', day: 'numeric' })}
                     </time>
                     <span>•</span>
                     <span>{article.author}</span>

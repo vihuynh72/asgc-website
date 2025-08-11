@@ -1,3 +1,6 @@
+import { formatDateUTC } from '../../../lib/date'
+import { UtilityBar } from '../../../components/governance/UtilityBar'
+
 export default function AgendasPage() {
   // TODO: Replace with actual API call to fetch agendas
   const mockAgendas = [
@@ -75,33 +78,99 @@ export default function AgendasPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Meeting Agendas</h1>
-          <p className="text-lg text-gray-600">
-            View upcoming meeting agendas and stay informed about ASGC discussions.
-          </p>
+    <div className="min-h-screen bg-[var(--color-background)]">
+      {/* Hero Section */}
+      <div className="hero-section py-16">
+        <div className="container">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-[var(--color-foreground)]">
+              Shape Your Campus Future
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-[var(--color-muted)]">
+              Every decision starts here. View meeting agendas for upcoming meetings.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a 
+                href="#upcoming-meetings"
+                className="btn-primary inline-flex"
+              >
+                📋 View Next Meeting
+              </a>
+              <button 
+                className="btn-ghost"
+                disabled
+              >
+                ✨ Submit Agenda Item
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="container py-8">
+        <UtilityBar downloadHref="/governance/agendas" />
+        <div className="max-w-4xl mx-auto">
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 -mt-8">
+            <div className="asgc-card p-6 text-center">
+              <div className="text-3xl font-bold text-[var(--color-foreground)] mb-2">3</div>
+              <div className="text-[var(--color-muted)]">Upcoming Meetings</div>
+            </div>
+            <div className="asgc-card p-6 text-center">
+              <div className="text-3xl font-bold text-[var(--color-foreground)] mb-2">24</div>
+              <div className="text-[var(--color-muted)]">Agenda Items This Month</div>
+            </div>
+            <div className="asgc-card p-6 text-center">
+              <div className="text-3xl font-bold text-[var(--color-foreground)] mb-2">100%</div>
+              <div className="text-[var(--color-muted)]">Open & Transparent</div>
+            </div>
+          </div>
+
+          {/* Get Started Section */}
+          <div className="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-2xl p-8 mb-8">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold mb-4">🚀 Get Started Now!</h2>
+              <p className="text-xl mb-6 text-green-50">
+                Your voice matters! Join the conversation and make a real impact on campus life.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="text-2xl mb-2">👀</div>
+                  <h3 className="font-semibold mb-2">Explore Agendas</h3>
+                  <p className="text-sm text-green-50">See what's being discussed in upcoming meetings</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="text-2xl mb-2">💡</div>
+                  <h3 className="font-semibold mb-2">Submit Ideas</h3>
+                  <p className="text-sm text-green-50">Propose agenda items for student issues you care about</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="text-2xl mb-2">🎯</div>
+                  <h3 className="font-semibold mb-2">Attend Meetings</h3>
+                  <p className="text-sm text-green-50">Show up and be part of the decision-making process</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
         {/* Filter and Search */}
-        <div className="bg-white rounded-lg shadow-md border p-6 mb-8">
+  <div className="asgc-card p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <input
                 type="text"
                 placeholder="Search agendas..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    className="form-input"
               />
             </div>
-            <select className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <select className="form-input py-2">
               <option value="">All Councils</option>
               <option value="general-assembly">General Assembly</option>
               <option value="student-senate">Student Senate</option>
               <option value="budget-committee">Budget Committee</option>
               <option value="judiciary">Judiciary Committee</option>
             </select>
-            <select className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <select className="form-input py-2">
               <option value="">All Status</option>
               <option value="published">Published</option>
               <option value="draft">Draft</option>
@@ -110,8 +179,26 @@ export default function AgendasPage() {
         </div>
 
         {/* Upcoming Meetings */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Upcoming Meetings</h2>
+        <section id="upcoming-meetings" className="mb-12">
+          {/* Next Meeting Alert */}
+          <div className="asgc-card bg-[radial-gradient(400px_300px_at_0%_0%,rgba(14,165,233,0.08),transparent)] rounded-xl p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="bg-[var(--color-card)] text-[var(--color-foreground)] rounded-full p-2 mr-4">
+                  🔥
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[var(--color-foreground)]">Next Meeting: This Friday!</h3>
+                  <p className="text-[var(--color-muted)]">ASGC General Assembly - August 30th at 7:00 PM</p>
+                </div>
+              </div>
+              <button className="btn-secondary">
+                Set Reminder
+              </button>
+            </div>
+          </div>
+          
+          <h2 className="text-2xl font-bold mb-6">📅 All Upcoming Meetings</h2>
           <div className="space-y-6">
             {publishedAgendas.map((agenda) => (
               <div key={agenda.id} className="bg-white rounded-lg shadow-md border overflow-hidden">
@@ -132,12 +219,7 @@ export default function AgendasPage() {
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
-                          {agenda.meetingDate.toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })}
+                          {formatDateUTC(agenda.meetingDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                         </span>
                         <span className="flex items-center">
                           <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +229,7 @@ export default function AgendasPage() {
                         </span>
                         {agenda.publishedAt && (
                           <span className="text-xs text-gray-500">
-                            Published {agenda.publishedAt.toLocaleDateString()}
+                            Published {formatDateUTC(agenda.publishedAt)}
                           </span>
                         )}
                       </div>
@@ -213,11 +295,7 @@ export default function AgendasPage() {
                         <h3 className="font-semibold text-gray-900">{agenda.title}</h3>
                         <div className="flex items-center space-x-3 text-sm text-gray-600 mt-1">
                           <span>
-                            {agenda.meetingDate.toLocaleDateString('en-US', {
-                              weekday: 'long',
-                              month: 'long',
-                              day: 'numeric',
-                            })}
+                            {formatDateUTC(agenda.meetingDate, { weekday: 'long', month: 'long', day: 'numeric' })}
                           </span>
                           <span>•</span>
                           <span>{agenda.council}</span>
@@ -257,6 +335,7 @@ export default function AgendasPage() {
           </p>
         </div>
       </div>
+    </div>
     </div>
   )
 }

@@ -1,8 +1,10 @@
+// OVERHAUL PLAN: Mobile drawer with search and hierarchical nav; keyboard and aria-expanded states included.
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { navigationItems, NavItem } from './GlobalNav';
+import { SearchBar } from './SearchBar';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -33,26 +35,31 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
         onClick={onClose}
         aria-hidden="true"
       />
       
-      {/* Mobile menu */}
-      <div className="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl z-50 md:hidden">
+      {/* Mobile menu drawer */}
+      <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-[var(--color-background)] border-l border-[var(--color-border)] shadow-xl z-50 lg:hidden">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+          <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)]">
+            <h2 className="text-lg font-semibold text-[var(--color-foreground)]">Navigation</h2>
             <button
               onClick={onClose}
-              className="p-2 -mr-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
+              className="p-2 -mr-2 text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] focus-ring rounded-md"
               aria-label="Close menu"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+          </div>
+
+          {/* Search */}
+          <div className="p-4 border-b border-[var(--color-border)]">
+            <SearchBar onSearch={() => handleLinkClick()} />
           </div>
 
           {/* Navigation */}
@@ -70,14 +77,14 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
             </div>
           </nav>
 
-          {/* Footer */}
-          <div className="border-t border-gray-200 p-4">
+          {/* Footer CTA */}
+          <div className="border-t border-[var(--color-border)] p-4">
             <Link
-              href="/contact"
+              href="/get-involved"
               onClick={handleLinkClick}
-              className="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="btn-primary w-full justify-center"
             >
-              Contact Us
+              Join ASGC
             </Link>
           </div>
         </div>
@@ -99,7 +106,7 @@ function MobileNavItem({ item, isExpanded, onToggle, onLinkClick }: MobileNavIte
       <Link
         href={item.href}
         onClick={onLinkClick}
-        className="block py-3 px-3 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="block py-3 px-3 text-base font-medium text-[var(--color-foreground)] hover:text-[var(--asgc-primary)] hover:bg-[var(--color-muted)] rounded-lg transition-colors focus-ring"
       >
         {item.label}
       </Link>
@@ -110,12 +117,12 @@ function MobileNavItem({ item, isExpanded, onToggle, onLinkClick }: MobileNavIte
     <div>
       <button
         onClick={onToggle}
-        className="flex items-center justify-between w-full py-3 px-3 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="flex items-center justify-between w-full py-3 px-3 text-base font-medium text-[var(--color-foreground)] hover:text-[var(--asgc-primary)] hover:bg-[var(--color-muted)] rounded-lg transition-colors focus-ring"
         aria-expanded={isExpanded}
       >
         {item.label}
         <svg
-          className={`h-5 w-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`h-5 w-5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -130,7 +137,7 @@ function MobileNavItem({ item, isExpanded, onToggle, onLinkClick }: MobileNavIte
           <Link
             href={item.href}
             onClick={onLinkClick}
-            className="block py-2 px-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="block py-2 px-3 text-sm text-[var(--color-muted-foreground)] hover:text-[var(--asgc-primary)] hover:bg-[var(--color-muted)] rounded-lg transition-colors focus-ring"
           >
             Overview
           </Link>
@@ -139,7 +146,7 @@ function MobileNavItem({ item, isExpanded, onToggle, onLinkClick }: MobileNavIte
               key={child.href}
               href={child.href}
               onClick={onLinkClick}
-              className="block py-2 px-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="block py-2 px-3 text-sm text-[var(--color-muted-foreground)] hover:text-[var(--asgc-primary)] hover:bg-[var(--color-muted)] rounded-lg transition-colors focus-ring"
             >
               {child.label}
             </Link>

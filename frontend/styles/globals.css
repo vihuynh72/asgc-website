@@ -1,3 +1,186 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* OVERHAUL PLAN: Map tokens to CSS vars for light + alt theme, define fluid type scale, and unify components (buttons, cards, inputs). */
+/* OVERHAUL START */
+:root{--asgc-primary:#14532D;--asgc-secondary:#CA8A04;--asgc-accent:#0EA5E9;--asgc-neutral-900:#111827;--asgc-neutral-50:#F8FAFC;--asgc-surface:#FFFFFF;--asgc-border:#E5E7EB;--asgc-muted:#6B7280}
+[data-theme="b"]{--asgc-primary:#065F46;--asgc-secondary:#4338CA;--asgc-accent:#14B8A6;--asgc-neutral-900:#0F172A;--asgc-neutral-50:#F9FAFB;--asgc-surface:#FFFFFF;--asgc-border:#E5E7EB;--asgc-muted:#64748B}
+
+/* Semantic tokens consumed by utilities/components */
+:root{
+  --color-background: var(--asgc-neutral-50);
+  --color-foreground: var(--asgc-neutral-900);
+  --color-muted: var(--asgc-muted);
+  --color-muted-foreground: var(--asgc-neutral-900);
+  --color-accent: var(--asgc-accent);
+  --color-accent-foreground: var(--asgc-neutral-50);
+  --color-border: var(--asgc-border);
+  --color-card: var(--asgc-surface);
+  --color-card-foreground: var(--asgc-neutral-900);
+
+  --radius: 16px;
+  --container-max-width: 1200px;
+  --header-height: 4rem;
+}
+/* OVERHAUL END */
+
+/* Component base styles */
+@layer base {
+  * {
+    @apply border-[var(--color-border)];
+  }
+  
+  body {
+    @apply bg-[var(--color-background)] text-[var(--color-foreground)] font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Typography scale with fluid sizing (guardrails) */
+  h1 { @apply font-semibold tracking-tight; font-size: clamp(36px,5vw,56px); }
+  h2 { @apply font-semibold tracking-tight; font-size: clamp(28px,3vw,40px); }
+  h3 { @apply font-semibold; font-size: clamp(22px,2.4vw,28px); }
+  
+  h4 {
+    @apply text-lg md:text-xl font-semibold leading-snug;
+  }
+  
+  p { @apply text-base md:text-[17px] leading-7 text-[var(--asgc-neutral-900)]; }
+  
+  /* Skip to content link for accessibility */
+  .skip-to-content {
+    @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50;
+    @apply bg-[var(--asgc-primary)] text-white px-4 py-2 rounded-lg;
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2;
+  }
+}
+
+@layer components {
+  /* Container system */
+  .container {
+    @apply w-full mx-auto px-4 md:px-6;
+    max-width: var(--container-max-width);
+  }
+  
+  /* Card system - minimal, breathing space */
+  .asgc-card {
+    @apply bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-6;
+    @apply shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  
+  .asgc-card-compact {
+    @apply bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg p-4;
+    @apply shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+  
+  /* Button system */
+  /* STYLE SNIPPETS (exact) */
+  .btn-primary { @apply inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-white bg-[var(--asgc-primary)] hover:opacity-95 active:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--asgc-accent)] transition; }
+  
+  .btn-secondary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium bg-[var(--color-card)] text-[var(--color-foreground)] hover:bg-[var(--asgc-neutral-50)] border border-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2 transition-all duration-200 ease-in-out; }
+  
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium;
+    @apply border border-[var(--asgc-primary)] text-[var(--asgc-primary)] hover:bg-[var(--asgc-primary)] hover:text-white;
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2;
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .btn-ghost { @apply rounded-xl px-4 py-2.5 border border-[var(--asgc-border)] text-[var(--asgc-neutral-900)] hover:bg-[var(--asgc-neutral-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--asgc-accent)]; }
+  
+  /* Input system */
+  .form-input { @apply w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:border-transparent placeholder:text-[var(--asgc-neutral-400)] transition-all duration-200; }
+  
+  /* Link system */
+  .link-primary { @apply text-[var(--asgc-accent)] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--asgc-accent)]; }
+
+  /* Section header (spec exact) */
+  .section-header { @apply mb-6; color: var(--asgc-neutral-900); }
+  
+  /* Navigation styles */
+  .nav-link {
+    @apply text-[var(--color-foreground)] hover:text-[var(--asgc-primary)];
+    @apply font-medium transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2 focus:rounded;
+  }
+  
+  /* Section spacing */
+  .section-spacing {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  /* Content spacing */
+  .content-spacing {
+    @apply space-y-6 md:space-y-8;
+  }
+  
+  /* Hero section styles */
+  .hero-section {
+  /* Background (original, subtle): */
+  background: radial-gradient(1200px 600px at 50% -20%, rgba(14,165,233,0.08), transparent), linear-gradient(#FAFAF9, #FFFFFF);
+    @apply border-b border-[var(--color-border)];
+  }
+  
+  /* Status badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+  
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .badge-error {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  /* Focus visible improvements */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2;
+  }
+}
+
+/* Accessibility enhancements */
+@layer utilities {
+  /* Respect motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* High contrast mode adjustments */
+  @media (prefers-contrast: high) {
+    .asgc-card {
+      @apply border-2;
+    }
+    
+    .btn-primary {
+      @apply ring-2 ring-offset-2 ring-[var(--asgc-neutral-900)];
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .no-print {
+      @apply hidden;
+    }
+    
+    * {
+      @apply text-black bg-white;
+    }
+  }
+}

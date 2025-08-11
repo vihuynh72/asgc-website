@@ -35,7 +35,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Prevent hydration mismatch by not rendering until after mount
   if (!mounted) {
-    return <div>{children}</div>;
+    return (
+      <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+        {children}
+      </ThemeContext.Provider>
+    );
   }
 
   return (

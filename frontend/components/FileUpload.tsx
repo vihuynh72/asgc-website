@@ -45,7 +45,7 @@ export default function FileUpload({ onUploadComplete }: FileUploadProps) {
         throw new Error(presignResponse.error || 'Failed to get presigned URLs')
       }
 
-      const { uploadId, key, presignedUrls } = presignResponse.data
+  const { key, presignedUrls } = presignResponse.data
 
       // Upload parts
       const uploadPromises = []

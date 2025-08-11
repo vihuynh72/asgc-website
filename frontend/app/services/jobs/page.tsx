@@ -1,3 +1,5 @@
+import { formatDateUTC } from '../../../lib/date'
+
 export default function JobsPage() {
   // TODO: Replace with actual API call to fetch job postings
   const mockJobs = [
@@ -225,11 +227,7 @@ export default function JobsPage() {
                     <div className="text-right">
                       <div className="text-sm text-gray-600 mb-2">Application Deadline</div>
                       <div className={`text-sm font-medium ${isDeadlineSoon(job.deadline) ? 'text-red-600' : 'text-gray-900'}`}>
-                        {job.deadline.toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })}
+                        {formatDateUTC(job.deadline, { year: 'numeric', month: 'long', day: 'numeric' })}
                       </div>
                     </div>
                   </div>
@@ -311,7 +309,7 @@ export default function JobsPage() {
                     <div className="flex items-center space-x-4 text-sm text-gray-500 mb-2">
                       <span>{job.department}</span>
                       <span>{job.commitment}</span>
-                      <span>Deadline: {job.deadline.toLocaleDateString()}</span>
+                      <span>Deadline: {formatDateUTC(job.deadline)}</span>
                     </div>
                     
                     <p className="text-gray-600">

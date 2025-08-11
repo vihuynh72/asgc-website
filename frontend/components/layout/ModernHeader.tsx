@@ -1,8 +1,9 @@
+// OVERHAUL PLAN: Legacy modern header adjusted to use GlobalNav; kept for compatibility.
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { GlobalNav } from '../nav/ModernGlobalNav';
+import { GlobalNav } from '../nav/GlobalNav';
 import { MobileNav } from '../nav/MobileNav';
 import { SearchBar } from '../nav/SearchBar';
 import { ThemeToggle } from '../theme/ThemeToggle';

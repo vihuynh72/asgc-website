@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 interface QuickAction {
   label: string;
   href: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   description: string;
 }
 
@@ -61,7 +62,7 @@ export function Hero({
         }} />
       </div>
 
-      <div className="container-base relative">
+      <div className="container relative">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main headline */}
           <h1 className="text-h1 text-[var(--color-foreground)] mb-6">
@@ -89,7 +90,7 @@ export function Hero({
               <Link
                 key={index}
                 href={action.href}
-                className="group card p-6 text-left hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2"
+                className="group asgc-card p-6 text-left hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2"
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-[var(--asgc-primary)] bg-opacity-10 rounded-lg flex items-center justify-center text-[var(--asgc-primary)] group-hover:bg-[var(--asgc-primary)] group-hover:text-white transition-all duration-200">
@@ -118,7 +119,7 @@ export function Hero({
             </Link>
             <Link
               href="/governance/meetings"
-              className="btn-ghost"
+              className="btn-secondary"
             >
               Attend a Meeting
             </Link>
