@@ -82,27 +82,11 @@ export const navigationItems: NavItem[] = [
         label: 'Leadership',
         href: '/get-involved#leadership',
         description: 'Leadership development programs'
-      }
-    ]
   },
-  {
-    label: 'Funding',
-    href: '/funding',
-    children: [
       {
-        label: 'Request Funding',
-        href: '/funding/request',
-        description: 'Apply for student organization funding'
-      },
-      {
-        label: 'Guidelines',
-        href: '/funding#guidelines',
-        description: 'Funding criteria and process'
-      },
-      {
-        label: 'Budget',
-        href: '/funding#budget',
-        description: 'ASGC budget transparency'
+        label: 'News & Updates',
+        href: '/news',
+        description: 'Announcements and campus updates'
       }
     ]
   },
@@ -121,15 +105,16 @@ export const navigationItems: NavItem[] = [
         description: 'Student employment opportunities'
       },
       {
+        label: 'Funding & Grants',
+        href: '/funding',
+        description: 'Apply for org funding and view guidelines'
+      },
+      {
         label: 'Resources',
         href: '/services#resources',
         description: 'Student support resources'
       }
     ]
-  },
-  {
-    label: 'News',
-    href: '/news'
   },
   {
     label: 'About',

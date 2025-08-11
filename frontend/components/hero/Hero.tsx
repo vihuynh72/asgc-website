@@ -12,9 +12,9 @@ interface HeroStats { value: string; label: string }
 interface HeroProps { stats?: HeroStats[] }
 
 const defaultStats: HeroStats[] = [
-  { value: '20,000+', label: 'Students Represented' },
-  { value: '$50k+', label: 'Funding Distributed' },
-  { value: '15+', label: 'Active Committees' }
+  { value: 'Student Community', label: 'Students we advocate for' },
+  { value: 'Funding Programs', label: 'Support for student orgs' },
+  { value: 'Committees & Councils', label: 'Opportunities to serve' }
 ];
 
 export function Hero({ stats = defaultStats }: HeroProps) {
@@ -31,7 +31,7 @@ export function Hero({ stats = defaultStats }: HeroProps) {
             </motion.h1>
 
             <motion.p {...respectReducedMotion(fadeUp(0.1))} className="text-lg md:text-xl text-[var(--color-muted)] mb-6 max-w-3xl mx-auto lg:mx-0 leading-relaxed text-center lg:text-left">
-              The Associated Students of Grossmont College represents over 20,000 students, advocating for your needs and creating opportunities that enhance your college experience.
+              The Associated Students of Grossmont College represents and advocates for Grossmont College students, creating opportunities that enhance the campus experience.
             </motion.p>
 
             {/* Stats under description */}

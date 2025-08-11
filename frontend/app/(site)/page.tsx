@@ -70,6 +70,7 @@ export default function SiteHomePage() {
             <h2 className="font-semibold tracking-tight text-[clamp(28px,3vw,40px)] section-header">Upcoming Events</h2>
             <Link href="/services/events" className="link-primary">View all</Link>
           </div>
+          <p className="text-sm text-[var(--color-muted)] mb-4">Sample events shown. Confirm dates and details on the official calendar.</p>
           <motion.div {...respectReducedMotion(stagger(0.08, 0.1))} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <motion.div {...respectReducedMotion(fadeUp(0))}>
               <EventCard
@@ -115,6 +116,7 @@ export default function SiteHomePage() {
             <h2 className="font-semibold tracking-tight text-[clamp(28px,3vw,40px)] section-header">Latest News</h2>
             <Link href="/news" className="link-primary">Read more</Link>
           </div>
+          <p className="text-sm text-[var(--color-muted)] mb-4">Sample announcements for demo. Refer to official channels for updates.</p>
           <motion.div {...respectReducedMotion(stagger(0.08, 0.1))} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <motion.div {...respectReducedMotion(fadeUp(0))}>
               <NewsCard

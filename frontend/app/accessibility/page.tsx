@@ -179,12 +179,10 @@ export default function AccessibilityPage() {
               <li>Plain language summaries for complex documents</li>
             </ul>
             
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h3 className="font-semibold text-blue-900 mb-2">Request Alternative Formats</h3>
               <p className="text-blue-800 text-sm">
-                If you need a document in an alternative format, please contact us at 
-                <a href="mailto:accessibility@asgc.university.edu" className="underline">accessibility@asgc.university.edu</a> 
-                or call (555) 123-4567. We will provide the document in your preferred format within 5 business days.
+                If you need a document in an alternative format, please use the contact options on the official Grossmont College website.
               </p>
             </div>
           </section>
@@ -237,9 +235,7 @@ export default function AccessibilityPage() {
                 <div>
                   <h3 className="font-semibold text-green-900 mb-2">Contact Information</h3>
                   <p className="text-green-800 text-sm">
-                    <strong>Email:</strong> accessibility@asgc.university.edu<br/>
-                    <strong>Phone:</strong> (555) 123-4567<br/>
-                    <strong>TTY:</strong> (555) 123-4568
+                    See grossmont.edu and gcccd.edu for current accessibility contacts.
                   </p>
                 </div>
                 <div>

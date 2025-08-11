@@ -12,30 +12,30 @@ async function main() {
 
   // Create users
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@asgc.edu' },
+    where: { email: 'admin@example.com' },
     update: {},
     create: {
-      email: 'admin@asgc.edu',
+      email: 'admin@example.com',
       name: 'ASGC Admin',
       role: UserRole.ADMIN,
     },
   })
 
   const officerUser = await prisma.user.upsert({
-    where: { email: 'president@asgc.edu' },
+    where: { email: 'president@example.com' },
     update: {},
     create: {
-      email: 'president@asgc.edu',
+      email: 'president@example.com',
       name: 'ASGC President',
       role: UserRole.OFFICER,
     },
   })
 
   const studentUser = await prisma.user.upsert({
-    where: { email: 'student@asgc.edu' },
+    where: { email: 'student@example.com' },
     update: {},
     create: {
-      email: 'student@asgc.edu',
+      email: 'student@example.com',
       name: 'Student Member',
       role: UserRole.STUDENT,
     },
@@ -67,7 +67,7 @@ async function main() {
       date: new Date('2025-08-15T14:00:00Z'),
       location: 'Student Center Room 200',
       livestream: 'https://zoom.us/j/123456789',
-      publicNote: 'Public comment period: 2:00-2:15 PM. Please register to speak at asgc.edu/speak',
+  publicNote: 'Public comment period: 2:00-2:15 PM. Please register to speak via the official channels.',
     },
   })
 
@@ -137,21 +137,21 @@ async function main() {
         description: 'Oversees ASGC budget and funding allocations',
         cadence: 'Weekly',
         seats: 5,
-        applyUrl: 'https://asgc.edu/apply/budget-committee',
+  applyUrl: '#',
       },
       {
         name: 'Student Life Committee',
         description: 'Plans events and student engagement initiatives',
         cadence: 'Biweekly',
         seats: 7,
-        applyUrl: 'https://asgc.edu/apply/student-life',
+  applyUrl: '#',
       },
       {
         name: 'Academic Affairs Committee',
         description: 'Addresses academic policies and student concerns',
         cadence: 'Monthly',
         seats: 6,
-        applyUrl: 'https://asgc.edu/apply/academic-affairs',
+  applyUrl: '#',
       },
     ],
   })
@@ -178,7 +178,7 @@ async function main() {
     data: {
       programId: studentOrgProgram.id,
       orgName: 'Environmental Club',
-      contactEmail: 'enviro@students.edu',
+  contactEmail: 'enviro@example.com',
       status: RequestStatus.SUBMITTED,
       amountCents: 75000, // $750
       submittedAt: new Date(),
@@ -223,19 +223,19 @@ async function main() {
         title: 'Student Assistant - ASGC Office',
         department: 'Student Government',
         description: 'Support ASGC operations and student services',
-        applyUrl: 'https://asgc.edu/jobs/student-assistant',
+  applyUrl: '#',
       },
       {
         title: 'Peer Tutor - Math Center',
         department: 'Academic Support',
         description: 'Provide tutoring support for math courses',
-        applyUrl: 'https://asgc.edu/jobs/math-tutor',
+  applyUrl: '#',
       },
       {
         title: 'Event Coordinator Assistant',
         department: 'Student Life',
         description: 'Help plan and execute campus events',
-        applyUrl: 'https://asgc.edu/jobs/event-coordinator',
+  applyUrl: '#',
       },
     ],
   })

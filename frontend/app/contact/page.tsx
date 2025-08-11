@@ -38,7 +38,7 @@ export default function ContactPage() {
                   name="email"
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="your.email@university.edu"
+                  placeholder="your.email@example.com"
                 />
               </div>
 
@@ -120,7 +120,7 @@ export default function ContactPage() {
           {/* Contact Information */}
           <div className="space-y-6">
             {/* Office Information */}
-            <div className="bg-white rounded-lg shadow-md border p-6">
+      <div className="bg-white rounded-lg shadow-md border p-6">
               <h2 className="text-xl font-semibold mb-4">Office Information</h2>
               <div className="space-y-3">
                 <div className="flex items-start">
@@ -129,10 +129,10 @@ export default function ContactPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <div>
-                    <p className="font-medium">ASGC Office</p>
-                    <p className="text-gray-600">Student Union Building, Room 201</p>
-                    <p className="text-gray-600">123 University Avenue</p>
-                    <p className="text-gray-600">Campus City, ST 12345</p>
+        <p className="font-medium">ASGC Office</p>
+        <p className="text-gray-600">Grossmont College</p>
+        <p className="text-gray-600">8800 Grossmont College Dr</p>
+        <p className="text-gray-600">El Cajon, CA 92020</p>
                   </div>
                 </div>
 
@@ -142,7 +142,9 @@ export default function ContactPage() {
                   </svg>
                   <div>
                     <p className="font-medium">Phone</p>
-                    <p className="text-gray-600">(555) 123-4567</p>
+                    <p className="text-gray-600">
+                      Refer to the official Grossmont College directory at grossmont.edu for current phone numbers.
+                    </p>
                   </div>
                 </div>
 
@@ -152,7 +154,7 @@ export default function ContactPage() {
                   </svg>
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-gray-600">asgc@university.edu</p>
+                    <p className="text-gray-600">Refer to official contacts at grossmont.edu and gcccd.edu</p>
                   </div>
                 </div>
               </div>
@@ -184,7 +186,7 @@ export default function ContactPage() {
             </div>
 
             {/* Emergency Contact */}
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+    <div className="bg-red-50 border border-red-200 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-red-900 mb-4">Emergency Contact</h2>
               <p className="text-red-800 mb-2">
                 For urgent student issues outside office hours:
@@ -195,7 +197,7 @@ export default function ContactPage() {
                 </svg>
                 <div>
                   <p className="font-medium text-red-900">Emergency Line</p>
-                  <p className="text-red-800">(555) 123-HELP (4357)</p>
+      <p className="text-red-800">Dial 911 for emergencies</p>
                 </div>
               </div>
             </div>
