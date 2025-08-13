@@ -11,8 +11,7 @@ interface OrbitGalleryProps {
   onAddPhotos?: () => void;
 }
 
-// Three-position carousel with clockwise rotation [1] -> [2] -> [3] -> [1]
-// Only loads new image when moving from position [3] to position [1]
+// Orbital carousel with three cards rotating around a center point
 export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in Action", onAddPhotos }: OrbitGalleryProps) {
   const reduced = useReducedMotion();
 
@@ -25,133 +24,127 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
   }));
   const source = (photos.length ? photos : placeholders);
 
-  // Track which image index is at each position
-  // positions: 0 = position [1], 1 = position [2], 2 = position [3]
-  const [imageIndices, setImageIndices] = useState<number[]>([0, 1, 2]);
-  
-  // Track which position is currently active (front/featured)
-  const [activePosition, setActivePosition] = useState<number>(0);
-  
-  // Track the next image index to load when [3] -> [1]
-  const [nextImageIndex, setNextImageIndex] = useState<number>(3 % source.length);
+  // Orbit configuration
+  const radius = 150; // Distance from center to cards
+  const baseAngles = [0, 120, 240]; // Starting angles for 3 cards (120° apart)
+  const [theta, setTheta] = useState(0); // Current rotation angle
+  const [slotIdx, setSlotIdx] = useState([0, 1, 2]); // Which source images are in each slot
+  const [nextImageIndex, setNextImageIndex] = useState(3); // Track the next image to load
 
-  // Define the fixed positions for the three slots - horizontal staggered layout
-  const positions = [
-    { top: "50%", left: "50%" },   // Position [1]: center (main)
-    { top: "50%", left: "75%" },   // Position [2]: right
-    { top: "50%", left: "25%" }    // Position [3]: left
-  ];
-  
-  // Image sizes and styles for each position
-  const styles = [
-    { scale: 1.0, zIndex: 30, opacity: 1.0, translateZ: 0 },       // Position [1]: front/center
-    { scale: 0.85, zIndex: 20, opacity: 0.8, translateZ: -40 },    // Position [2]: right
-    { scale: 0.85, zIndex: 10, opacity: 0.8, translateZ: -40 }     // Position [3]: left
-  ];
+  // Keep the base card size consistent
+  const size = { w: 320, h: 200 };
 
-  // Rotate images clockwise: [1] -> [2], [2] -> [3], [3] -> [1] (with new image)
+  // Make side cards nearly the same size as the front card
+  const slotStyle = (angleDeg: number) => {
+    const rad = (angleDeg * Math.PI) / 180;
+    const cos = Math.cos(rad);
+    // 0.85 … 1.0 instead of 0.75 … 1.0
+    const scale = 0.85 + 0.15 * ((cos + 1) / 2);
+    const opacity = 0.6 + 0.4 * ((cos + 1) / 2);
+    const zIndex = cos > 0.6 ? 12 : 7;
+    const transform = `translate(-50%, -50%) rotate(${angleDeg}deg) translateX(${radius}px) rotate(${-angleDeg}deg) scale(${scale})`;
+    const front = cos > 0.6;
+    return { transform, opacity, zIndex, front } as const;
+  };
+
+  // Auto-rotation
   useEffect(() => {
     if (reduced) return;
     
     const timer = setInterval(() => {
-      // Shift active position clockwise
-      setActivePosition(prev => (prev + 1) % 3);
+      setTheta(prev => (prev + 120) % 360); // Rotate +120° for true clockwise: [1]→[2]→[3]→[1]
       
-      // Rotate images clockwise
-      setImageIndices(prev => {
-        const newIndices = [...prev];
+      // After each rotation, replace the image that just moved to the back (position 3)
+      setSlotIdx(prev => {
+        const newSlotIdx = [...prev];
+        // Find which slot just moved to the back (240° position after this rotation)
+        const rotationCount = Math.floor((theta + 120) / 120) % 3;
+        const backSlotIndex = (rotationCount + 2) % 3; // Slot that moved to back position
         
-        // Clockwise rotation: [1] -> [2], [2] -> [3], [3] -> [1]
-        newIndices[1] = prev[0]; // [1] moves to [2]
-        newIndices[2] = prev[1]; // [2] moves to [3]
-        newIndices[0] = nextImageIndex; // [3] moves to [1] with NEW image
-        
-        return newIndices;
+        // Load the next new image
+        newSlotIdx[backSlotIndex] = nextImageIndex % source.length;
+        return newSlotIdx;
       });
       
-      // Update the next image index for next cycle
-      setNextImageIndex(current => (current + 1) % source.length);
-      
+      // Increment to next image for next rotation
+      setNextImageIndex(prev => (prev + 1) % source.length);
     }, 7000); // 7 second cycle
     
     return () => clearInterval(timer);
-  }, [reduced, source.length, nextImageIndex]);
-
-  // Reset when source changes
-  useEffect(() => {
-    setImageIndices([0, 1, 2]);
-    setNextImageIndex(3 % source.length);
-    setActivePosition(0);
-  }, [source.length]);
+  }, [reduced, theta, source.length, nextImageIndex]);
 
   // Manual rotation function
   const handleNext = useCallback(() => {
-    // Shift active position clockwise
-    setActivePosition(prev => (prev + 1) % 3);
-    
-    // Rotate images clockwise
-    setImageIndices(prev => {
-      const newIndices = [...prev];
+    setTheta(prev => {
+      const newTheta = (prev + 120) % 360; // Rotate +120° for true clockwise: [1]→[2]→[3]→[1]
       
-      // Clockwise rotation: [1] -> [2], [2] -> [3], [3] -> [1]
-      newIndices[1] = prev[0]; // [1] moves to [2]
-      newIndices[2] = prev[1]; // [2] moves to [3]
-      newIndices[0] = nextImageIndex; // [3] moves to [1] with NEW image
+      // After each rotation, replace the image that just moved to the back (position 3)
+      setSlotIdx(prevSlot => {
+        const newSlotIdx = [...prevSlot];
+        // Find which slot just moved to the back (240° position after this rotation)
+        const rotationCount = Math.floor(newTheta / 120) % 3;
+        const backSlotIndex = (rotationCount + 2) % 3; // Slot that moved to back position
+        
+        // Load the next new image
+        newSlotIdx[backSlotIndex] = nextImageIndex % source.length;
+        return newSlotIdx;
+      });
       
-      return newIndices;
+      // Increment to next image for next rotation
+      setNextImageIndex(prev => (prev + 1) % source.length);
+      
+      return newTheta;
     });
-    
-    // Update the next image index for next cycle
-    setNextImageIndex(current => (current + 1) % source.length);
-  }, [nextImageIndex, source.length]);
+  }, [source.length, nextImageIndex]);
 
-  // Get the currently featured photo
-  const activePhoto = source[imageIndices[activePosition]];
+  // Reset when source changes
+  useEffect(() => {
+    setSlotIdx([0, 1, 2]);
+    setNextImageIndex(3);
+    setTheta(0);
+  }, [source.length]);
 
+  // Get the currently featured photo (front card)
+  const frontSlot = [0, 1, 2].find(k => {
+    const ang = (theta + baseAngles[k]) % 360;
+    const rad = (ang * Math.PI) / 180;
+    const cos = Math.cos(rad);
+    return cos > 0.6;
+  }) ?? 0;
+  const activePhoto = source[slotIdx[frontSlot]];
   return (
     <section className="relative">
       <div className="max-w-[var(--container-max-width)] mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(340px,1fr)_minmax(620px,1.2fr)] items-center gap-10">
-          {/* Left: Staggered Image Carousel */}
-          <div className="relative mx-auto h-[24rem] md:h-[28rem] w-full max-w-lg lg:mx-0" style={{ perspective: '1000px' }}>
-            <div className="relative w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
-              {/* Render the 3 positions */}
-              {[0, 1, 2].map((position) => {
-                const imageIndex = imageIndices[position];
-                const photo = source[imageIndex];
-                const isActive = position === activePosition;
-              
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(620px,1.2fr)_minmax(340px,1fr)] items-center gap-10">
+          {/* Left: Orbit */}
+          {/* Remove `mx-auto` so the carousel aligns to the left like the text */}
+          <div className="relative h-[24rem] md:h-[28rem] w-full max-w-5xl lg:mx-0">
+            {[0, 1, 2].map((k) => {
+              const ang = (theta + baseAngles[k]) % 360;
+              const { transform, opacity, zIndex, front } = slotStyle(ang);
+              const p = source[slotIdx[k]];
               return (
-                <motion.figure
-                  key={`position-${position}-img-${imageIndex}`}
+                <figure
+                  key={k}
                   role="listitem"
                   className="absolute transition-all duration-1000 ease-in-out"
-                  style={{
-                    top: positions[position].top,
-                    left: positions[position].left,
-                    transform: `translate(-50%, -50%) scale(${styles[position].scale}) translateZ(${styles[position].translateZ}px)`,
-                    opacity: styles[position].opacity,
-                    zIndex: styles[position].zIndex,
-                    transformStyle: "preserve-3d"
-                  }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: styles[position].opacity, scale: styles[position].scale }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  /* Anchor the orbit at the middle of its container */
+                  style={{ top: '50%', left: '50%', transform, zIndex }}
                 >
                   <div
-                    className={`relative overflow-hidden rounded-lg border bg-[var(--color-card)] ${
-                      isActive ? 'shadow-xl border-[var(--asgc-primary)]/25' : 'shadow-md border-[var(--color-border)]'
+                    className={`relative overflow-hidden rounded-2xl border bg-[var(--color-card)] ${
+                      front ? 'shadow-xl border-[var(--asgc-primary)]/25' : 'shadow-md border-[var(--color-border)]'
                     }`}
-                    style={{ width: isActive ? 320 : 240, height: isActive ? 200 : 150 }}
+                    style={{ width: size.w, height: size.h, opacity }}
                   >
-                    {photo?.src ? (
+                    {p?.src ? (
                       <Image
-                        src={photo.src}
-                        alt={photo.alt}
+                        src={p.src}
+                        alt={p.alt}
                         fill
                         className="object-cover"
-                        sizes={isActive ? "320px" : "240px"}
-                        priority={isActive}
+                        sizes="320px"
+                        priority={front}
                       />
                     ) : (
                       <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(260px_180px_at_30%_20%,rgba(14,165,233,0.10),transparent)]">
@@ -159,10 +152,9 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
                       </div>
                     )}
                   </div>
-                </motion.figure>
+                </figure>
               );
             })}
-            </div>
           </div>
 
           {/* Right: Title + metadata for the active/front photo */}
@@ -183,16 +175,20 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={handleNext}
-                  className="px-4 py-2 bg-[var(--asgc-primary)] hover:bg-[var(--asgc-primary-dark)] text-white rounded-lg font-medium transition-colors"
+                  className="group relative px-4 py-2 bg-[var(--asgc-primary)] text-white rounded-lg font-medium transition-all duration-200 ease-out hover:bg-[var(--asgc-primary-dark)] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2 active:scale-95"
+                  aria-label="View next photo in gallery"
                 >
-                  Next Photo
+                  <span className="relative z-10">Next Photo</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg transform -skew-x-12"></div>
                 </button>
                 {onAddPhotos && (
                   <button
                     onClick={onAddPhotos}
-                    className="px-4 py-2 bg-[var(--color-card)] hover:bg-[var(--color-border)] text-[var(--color-foreground)] border border-[var(--color-border)] rounded-lg font-medium transition-colors"
+                    className="group relative px-4 py-2 bg-[var(--color-card)] text-[var(--color-foreground)] border border-[var(--color-border)] rounded-lg font-medium transition-all duration-200 ease-out hover:bg-[var(--color-muted)]/10 hover:border-[var(--asgc-primary)]/30 hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2 active:scale-95"
+                    aria-label="Add more photos to gallery"
                   >
-                    Add Photos
+                    <span className="relative z-10">Add Photos</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[var(--asgc-primary)]/5 via-[var(--asgc-primary)]/10 to-[var(--asgc-primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
                   </button>
                 )}
               </div>
