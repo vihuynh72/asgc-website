@@ -34,12 +34,12 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
   // Keep the base card size consistent
   const size = { w: 320, h: 200 };
 
-  // Make side cards nearly the same size as the front card
+  // Make side cards smaller and front card 15% bigger for emphasis
   const slotStyle = (angleDeg: number) => {
     const rad = (angleDeg * Math.PI) / 180;
     const cos = Math.cos(rad);
-    // 0.85 … 1.0 instead of 0.75 … 1.0
-    const scale = 0.85 + 0.15 * ((cos + 1) / 2);
+    // 0.85 … 1.15 (front card is 15% bigger than base size)
+    const scale = 0.85 + 0.50 * ((cos + 1) / 2);
     const opacity = 0.6 + 0.4 * ((cos + 1) / 2);
     const zIndex = cos > 0.6 ? 12 : 7;
     const transform = `translate(-50%, -50%) rotate(${angleDeg}deg) translateX(${radius}px) rotate(${-angleDeg}deg) scale(${scale})`;
@@ -117,7 +117,7 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
       <div className="max-w-[var(--container-max-width)] mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(620px,1.2fr)_minmax(340px,1fr)] items-center gap-10">
           {/* Left: Orbit */}
-          {/* Remove `mx-auto` so the carousel aligns to the left like the text */}
+          {/* Position carousel to align with left content like the main title */}
           <div className="relative h-[24rem] md:h-[28rem] w-full max-w-5xl lg:mx-0">
             {[0, 1, 2].map((k) => {
               const ang = (theta + baseAngles[k]) % 360;
@@ -128,8 +128,8 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
                   key={k}
                   role="listitem"
                   className="absolute transition-all duration-1000 ease-in-out"
-                  /* Anchor the orbit at the middle of its container */
-                  style={{ top: '50%', left: '50%', transform, zIndex }}
+                  /* Anchor the orbit center more to the left to align with title */
+                  style={{ top: '50%', left: '35%', transform, zIndex }}
                 >
                   <div
                     className={`relative overflow-hidden rounded-2xl border bg-[var(--color-card)] ${
@@ -175,11 +175,10 @@ export function OrbitGallery({ photos = [], title = "Around Campus • ASGC in A
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={handleNext}
-                  className="group relative px-4 py-2 bg-[var(--asgc-primary)] text-white rounded-lg font-medium transition-all duration-200 ease-out hover:bg-[var(--asgc-primary-dark)] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2 active:scale-95"
+                  className="group btn-next-photo"
                   aria-label="View next photo in gallery"
                 >
-                  <span className="relative z-10">Next Photo</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg transform -skew-x-12"></div>
+                  <span>Next Photo</span>
                 </button>
                 {onAddPhotos && (
                   <button

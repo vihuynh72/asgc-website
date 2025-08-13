@@ -88,6 +88,28 @@
 
   .btn-ghost { @apply rounded-xl px-4 py-2.5 border border-[var(--asgc-border)] text-[var(--asgc-neutral-900)] hover:bg-[var(--asgc-neutral-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--asgc-accent)]; }
   
+  /* Next Photo button for OrbitGallery with darker green hover */
+  .btn-next-photo {
+    @apply relative px-4 py-2 bg-[var(--asgc-primary)] text-white rounded-lg font-medium;
+    @apply transition-all duration-200 ease-out hover:bg-[var(--asgc-primary-dark)] hover:shadow-lg hover:scale-105;
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2 active:scale-95;
+  }
+  
+  .btn-next-photo:hover {
+    color: #065f46; /* Dark green text on hover for visibility */
+  }
+  
+  .btn-next-photo::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-green-200/80 to-transparent;
+    @apply opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg;
+    transform: skewX(-12deg);
+  }
+  
+  .btn-next-photo span {
+    @apply relative z-10;
+  }
+  
   /* Input system */
   .form-input { @apply w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--asgc-accent)] focus:border-transparent placeholder:text-[var(--asgc-neutral-400)] transition-all duration-200; }
   
