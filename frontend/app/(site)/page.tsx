@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeUp, stagger, respectReducedMotion } from "../../components/motion/presets";
 import { Hero } from "../../components/hero/Hero";
-import { InfoCard } from "../../components/cards/InfoCard";
+import MiniTile from "../../components/cards/MiniTile";
 import { EventCard } from "../../components/cards/EventCard";
 import { NewsCard } from "../../components/cards/NewsCard";
 
@@ -14,51 +14,67 @@ export default function SiteHomePage() {
     <div className="flex flex-col min-h-screen bg-[var(--color-background)]">
       <Hero />
 
-      {/* Quick actions (3 cards) */}
-      <section className="section-spacing">
-        <div className="container">
-          <motion.div
-            {...respectReducedMotion(stagger(0.08, 0.15))}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-          >
-            <motion.div {...respectReducedMotion(fadeUp(0))}>
-              <InfoCard
-                title="Apply to a Committee"
-                description="Serve on a student committee and shape campus decisions."
-                href="/get-involved#committees"
-                icon={
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6M9 5h6a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                  </svg>
-                }
-              />
-            </motion.div>
+      {/* Quick actions (stacked rows; container left/right alternating, description opposite) */}
+      <section className="py-[2.8rem] md:py-[3.2rem]">
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10 space-y-[2rem] md:space-y-[2.4rem]">
+          {/* Row 1: Tile left, description right */}
+          <motion.div {...respectReducedMotion(fadeUp(0))}>
+            <div className="group w-full mx-auto grid grid-cols-1 md:grid-cols-[0.3fr_0.7fr] items-center md:justify-items-stretch gap-[1.6rem]">
+              <div className="justify-self-start">
+                <MiniTile
+                  title="Apply to a Committee"
+                  href="/get-involved#committees"
+                  icon={
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 4h6a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 4h6v2H9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+                    </svg>
+                  }
+                />
+              </div>
+              <div className="md:justify-self-stretch w-full text-right pr-[calc((100vw-100%)/2)] opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <p className="mt-1 block w-full text-right text-[clamp(28px,3.2vw,48px)] leading-tight tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-foreground)] via-[var(--asgc-primary)] to-[var(--color-foreground)] [background-size:340%_100%] animate-shimmer motion-reduce:animate-none motion-reduce:transform-none filter drop-shadow-[0_1px_0_rgba(0,0,0,0.05)] transition-[opacity,transform,filter] duration-300 ease-out group-hover:brightness-110 group-hover:scale-[1.01]">
+                  Shape campus decisions.
+                </p>
+              </div>
+            </div>
+          </motion.div>   
 
-            <motion.div {...respectReducedMotion(fadeUp(0.05))}>
-              <InfoCard
-                title="Request Funding"
-                description="Apply for student org funding to launch events or projects."
-                href="/funding/request"
-                icon={
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V4m0 12v4" />
-                  </svg>
-                }
-              />
-            </motion.div>
+          {/* Row 2: Description left, Tile right */}
+          <motion.div {...respectReducedMotion(fadeUp(0.05))}>
+            <div className="group w-full mx-auto grid grid-cols-1 md:grid-cols-[0.7fr_0.3fr] items-center md:justify-items-end gap-[1.6rem]">
+              <div className="justify-self-stretch w-full text-left order-2 md:order-1 opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <p className="w-full text-left text-[clamp(26px,3vw,44px)] leading-tight tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-foreground)] via-[var(--asgc-primary)] to-[var(--color-foreground)] [background-size:320%_100%] animate-shimmer motion-reduce:animate-none motion-reduce:transform-none filter drop-shadow-[0_1px_0_rgba(0,0,0,0.05)]">
+                  Get funding for your club
+                </p>
+              </div>
+              <div className="justify-self-end order-1 md:order-2">
+                <MiniTile
+                  title="Request Funding"
+                  href="/funding/request"
+                  icon={<svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .9-3 2s1.343 2 3 2 3 .9 3 2-1.343 2-3 2m0-8V4m0 12v4"/><path strokeLinecap="round" strokeLinejoin="round" d="M19 10v4m2-2h-4"/></svg>}
+                />
+              </div>
+            </div>
+          </motion.div>
 
-            <motion.div {...respectReducedMotion(fadeUp(0.1))}>
-              <InfoCard
-                title="Attend a Meeting"
-                description="See agendas, minutes, and attend upcoming sessions."
-                href="/governance/meetings"
-                icon={
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                }
-              />
-            </motion.div>
+          {/* Row 3: Tile left, Description right */}
+          <motion.div {...respectReducedMotion(fadeUp(0.1))}>
+            <div className="group w-full mx-auto grid grid-cols-1 md:grid-cols-[0.3fr_0.7fr] items-center md:justify-items-end gap-[1.6rem]">
+              <div className="justify-self-start">
+                <MiniTile
+                  title="Attend a Meeting"
+                  href="/governance/meetings"
+                  icon={<svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M3 8h18M5 21h14a2 2 0 002-2V8H3v11a2 2 0 002 2z"/><path strokeLinecap="round" strokeLinejoin="round" d="M9 14l2 2 4-4"/></svg>}
+                />
+              </div>
+              <div className="justify-self-end w-full text-right opacity-0 translate-y-1 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <p className="mt-1 w-full text-right text-[clamp(28px,3.2vw,48px)] leading-tight tracking-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-foreground)] via-[var(--asgc-primary)] to-[var(--color-foreground)] [background-size:340%_100%] animate-shimmer motion-reduce:animate-none motion-reduce:transform-none filter drop-shadow-[0_1px_0_rgba(0,0,0,0.05)] opacity-0 translate-y-[2px] transition-[opacity,transform,filter] duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:brightness-110 group-hover:scale-[1.01]">
+                  See agendas & minutes
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

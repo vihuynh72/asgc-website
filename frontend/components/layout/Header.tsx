@@ -34,14 +34,14 @@ export function Header() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex items-center gap-4 xl:gap-5 flex-1 min-w-0 justify-center">
+          <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 min-w-0 justify-center">
             <GlobalNav />
           </div>
 
           {/* Right side actions */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
             {/* Search - hidden on small screens */}
-            <div className="hidden md:block w-40 lg:w-52 xl:w-60">
+            <div className="hidden lg:block w-36 xl:w-48">
               <SearchBar />
             </div>
 
@@ -50,27 +50,28 @@ export function Header() {
 
             {/* CTA Button */}
             <Link
-              href="/get-involved"
+              href="/get-involved/join"
               className="hidden sm:inline-flex btn-primary text-sm px-3 py-2 whitespace-nowrap leading-none shrink-0"
             >
-              Join ASGC
+              Join Us
             </Link>
 
             {/* Mobile menu toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[var(--asgc-neutral-50)] focus-ring"
-              aria-label="Toggle mobile menu"
+              className="lg:hidden p-2 rounded-lg hover:bg-[var(--asgc-neutral-50)] focus:outline-none focus:ring-2 focus:ring-[var(--asgc-primary)] focus:ring-offset-2 transition-colors"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {isMobileMenuOpen ? (
                 // Close icon
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-6 w-6 text-[var(--color-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
                 // Menu icon
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-6 w-6 text-[var(--color-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -80,10 +81,12 @@ export function Header() {
       </div>
 
       {/* Mobile navigation */}
-      <MobileNav 
-        isOpen={isMobileMenuOpen} 
-        onClose={() => setIsMobileMenuOpen(false)} 
-      />
+      {isMobileMenuOpen && (
+        <MobileNav 
+          isOpen={isMobileMenuOpen} 
+          onClose={() => setIsMobileMenuOpen(false)} 
+        />
+      )}
     </header>
   );
 }

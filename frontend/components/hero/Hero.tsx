@@ -70,7 +70,7 @@ export function Hero({ stats = defaultStats }: HeroProps) {
       </div>
 
       {/* Gallery section under hero */}
-      <div className="pb-10 md:pb-14">
+      <div className="pt-8 md:pt-12 pb-10 md:pb-14">
         <OrbitGallery title="Moments from Campus & ASGC" photos={campusGallery} />
       </div>
     </section>

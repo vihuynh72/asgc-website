@@ -147,10 +147,11 @@ The ASGC website includes a two-theme design system:
 - Screen reader optimization
 
 ### Navigation Structure
-- Desktop: Mega-menu with hover dropdowns
-- Mobile: Slide-out drawer with search
-- Breadcrumbs on all inner pages
-- Global search functionality (stubbed)
+- **About Us**: Meet Our Team, Mission & Values, History, Constitution & Bylaws, Contact Us
+- **Governance**: Board Meetings, Agendas & Minutes, Resolutions, Committees
+- **Get Involved**: Join Us, Elections, Volunteer Opportunities, Clubs & Organizations
+- **Services & Resources**: Club and Student Organization Resources, ASGC Benefit Sticker, Campus Resources, Academic Support
+- **News & Events**: Upcoming Events, Newsletter, Gallery
 
 ### Component Architecture
 ```
@@ -159,9 +160,16 @@ components/
 ├── governance/      # Governance-specific components  
 ├── hero/           # Homepage hero section
 ├── layout/         # Header, footer, etc.
-├── nav/            # Navigation components
+├── nav/            # Data-driven navigation components
 └── theme/          # Theme provider and toggle
 ```
+
+### Data-Driven Navigation
+Navigation structure is defined in `lib/navigation.ts` and used by both desktop and mobile components:
+- Centralized configuration for easy maintenance
+- Supports nested dropdown menus
+- Accessible keyboard navigation
+- Responsive design patterns
 
 ### Content Management
 Currently uses TypeScript-based content with mock data in `lib/content/`. Ready for CMS integration.
@@ -169,7 +177,9 @@ Currently uses TypeScript-based content with mock data in `lib/content/`. Ready 
 ## Where to Edit
 
 ### Navigation & Colors
-- **Navigation items**: `components/nav/GlobalNav.tsx`
+- **Navigation structure**: `lib/navigation.ts` 
+- **Desktop nav**: `components/nav/GlobalNav.tsx`
+- **Mobile nav**: `components/nav/MobileNav.tsx`
 - **Theme colors**: `app/theme.ts` 
 - **CSS variables**: `styles/globals.css`
 

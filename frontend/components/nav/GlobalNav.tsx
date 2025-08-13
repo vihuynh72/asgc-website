@@ -1,126 +1,9 @@
-// OVERHAUL PLAN: Modern, accessible desktop nav with simple dropdowns; export items for MobileNav; sticky header handled by Header.
+// Modern, accessible desktop navigation with data-driven dropdown menus
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-
-export interface NavItem {
-  label: string;
-  href: string;
-  description?: string;
-  children?: NavItem[];
-}
-
-export const navigationItems: NavItem[] = [
-  {
-    label: 'Governance',
-    href: '/governance',
-    children: [
-      {
-        label: 'Meetings',
-        href: '/governance/meetings',
-        description: 'Board meetings and public sessions'
-      },
-      {
-        label: 'Agendas',
-        href: '/governance/agendas',
-        description: 'Upcoming meeting agendas'
-      },
-      {
-        label: 'Minutes',
-        href: '/governance/minutes',
-        description: 'Meeting minutes and records'
-      },
-      {
-        label: 'Bylaws',
-        href: '/governance/bylaws',
-        description: 'Constitution and governing documents'
-      },
-      {
-        label: 'Resolutions',
-        href: '/governance/resolutions',
-        description: 'Passed resolutions and policies'
-      }
-    ]
-  },
-  {
-    label: 'Elections',
-    href: '/elections',
-    children: [
-      {
-        label: 'Current Election',
-        href: '/elections',
-        description: 'Timeline and candidate information'
-      },
-      {
-        label: 'How to Vote',
-        href: '/elections#voting',
-        description: 'Voting process and eligibility'
-      },
-      {
-        label: 'Run for Office',
-        href: '/elections#candidates',
-        description: 'Information for potential candidates'
-      }
-    ]
-  },
-  {
-    label: 'Get Involved',
-    href: '/get-involved',
-    children: [
-      {
-        label: 'Committees',
-        href: '/get-involved#committees',
-        description: 'Join student committees'
-      },
-      {
-        label: 'Volunteer',
-        href: '/get-involved#volunteer',
-        description: 'Campus volunteer opportunities'
-      },
-      {
-        label: 'Leadership',
-        href: '/get-involved#leadership',
-        description: 'Leadership development programs'
-  },
-      {
-        label: 'News & Updates',
-        href: '/news',
-        description: 'Announcements and campus updates'
-      }
-    ]
-  },
-  {
-    label: 'Services',
-    href: '/services',
-    children: [
-      {
-        label: 'Events',
-        href: '/services/events',
-        description: 'Campus events and activities'
-      },
-      {
-        label: 'Jobs',
-        href: '/services/jobs',
-        description: 'Student employment opportunities'
-      },
-      {
-        label: 'Funding & Grants',
-        href: '/funding',
-        description: 'Apply for org funding and view guidelines'
-      },
-      {
-        label: 'Resources',
-        href: '/services#resources',
-        description: 'Student support resources'
-      }
-    ]
-  },
-  {
-    label: 'About',
-    href: '/about'
-  }
-];
+import { navigationConfig, type NavItem } from '../../lib/navigation';
 
 export function GlobalNav() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -148,8 +31,8 @@ export function GlobalNav() {
   }, []);
 
   return (
-  <nav className="flex items-center gap-4 xl:gap-5 whitespace-nowrap" role="navigation" aria-label="Main navigation">
-      {navigationItems.map((item) => (
+  <nav className="flex items-center gap-2 lg:gap-3 xl:gap-4 whitespace-nowrap" role="navigation" aria-label="Main navigation">
+      {navigationConfig.map((item) => (
         <div
           key={item.label}
           className="relative"
@@ -159,11 +42,11 @@ export function GlobalNav() {
           <Link
             href={item.href}
             id={`nav-${item.label.toLowerCase().replace(/\s+/g,'-')}`}
-            className="flex items-center gap-1 text-[var(--color-foreground)] hover:text-[var(--asgc-primary)] focus:outline-none focus:text-[var(--asgc-primary)] transition-colors duration-150 py-2 px-0.5 rounded focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2"
+            className="flex items-center gap-1 text-[var(--color-foreground)] hover:text-[var(--asgc-primary)] focus:outline-none focus:text-[var(--asgc-primary)] transition-colors duration-150 py-2 px-1 lg:px-2 rounded focus:ring-2 focus:ring-[var(--asgc-accent)] focus:ring-offset-2"
             aria-expanded={item.children ? activeDropdown === item.label : undefined}
             aria-haspopup={item.children ? 'true' : undefined}
           >
-            <span className="font-medium">{item.label}</span>
+            <span className="font-medium text-sm lg:text-base">{item.label}</span>
             {item.children && (
               <svg 
                 className={`w-4 h-4 transition-transform duration-200 ${
@@ -183,7 +66,11 @@ export function GlobalNav() {
             <div
               role="menu"
               aria-labelledby={`nav-${item.label.toLowerCase().replace(/\s+/g,'-')}`}
-              className="absolute top-full left-0 z-50 mt-1 w-64 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg shadow-lg py-2"
+              className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 mt-1 w-72 lg:w-80 xl:w-84 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg shadow-lg py-2 max-h-96 overflow-y-auto"
+              style={{
+                left: item.label === 'Services' ? '50%' : 
+                      item.label === 'News & Events' ? '25%' : '50%'
+              }}
             >
               {item.children.map((child) => (
                 <Link
@@ -191,9 +78,9 @@ export function GlobalNav() {
                   href={child.href}
           className="block px-4 py-3 text-sm text-[var(--color-foreground)] hover:bg-[var(--asgc-neutral-50)] hover:text-[var(--asgc-primary)] transition-colors duration-150 focus:outline-none focus:bg-[var(--asgc-neutral-50)] focus:text-[var(--asgc-primary)]"
                 >
-                  <div className="font-medium">{child.label}</div>
+                  <div className="font-medium leading-tight break-words">{child.label}</div>
                   {child.description && (
-                    <div className="text-xs text-[var(--color-muted-foreground)] mt-1">
+                    <div className="text-xs text-[var(--color-muted-foreground)] mt-1 leading-relaxed break-words">
                       {child.description}
                     </div>
                   )}
